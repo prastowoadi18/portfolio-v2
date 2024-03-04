@@ -12,8 +12,8 @@ export const METADATA = {
     url: process.env.DOMAIN,
     siteName: "Profile Prastowo Adi",
     locale: "id-ID",
-    img: "open-graph.jpg",
+    img: "open-graph.png",
   },
   exTitle: "Profile Prastowo Adi",
-  profile: "open-graph.jpg",
+  profile: "open-graph.png",
 };
