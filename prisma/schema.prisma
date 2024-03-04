@@ -1,0 +1,164 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id              String  @id @default(uuid())
+  name            String  @unique
+  profileImg      String
+  currentLocation String
+  about           String? @db.Text
+
+  socialMedia   SocialMedia[]
+  education     Education[]
+  certificate   Certificate[]
+  project       Project[]
+  experienceJob ExperienceJob[]
+
+  experianceStack ExperienceStack[]
+  projectStack    ProjectStack[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model SocialMedia {
+  id    String @id @default(uuid())
+  title String @unique
+  link  String
+
+  userId String
+  user   User?  @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
+}
+
+model Education {
+  id        String   @id @default(uuid())
+  title     String   @unique
+  desc      String
+  logo      String
+  startDate DateTime @default(now())
+  endDate   DateTime @default(now())
+
+  userId String
+  user   User?  @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
+}
+
+model Certificate {
+  id        String   @id @default(uuid())
+  title     String   @unique
+  from      String
+  desc      String
+  link      String
+  startDate DateTime @default(now())
+  endDate   DateTime @default(now())
+
+  userId String
+  user   User?  @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
+}
+
+model Project {
+  id       String @id @default(uuid())
+  title    String @unique
+  desc     String
+  linkGit  String
+  linkDemo String
+
+  projectStack ProjectStack[]
+
+  userId String
+  user   User?  @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
+}
+
+model ExperienceJob {
+  id        String   @id @default(uuid())
+  title     String   @unique
+  role      String
+  logo      String
+  desc      String
+  startDate DateTime @default(now())
+  endDate   DateTime @default(now())
+  location  String
+  type      String
+  workType  String
+  active    Boolean
+
+  experienceStack ExperienceStack[]
+
+  userId String
+  user   User?  @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
+}
+
+model ExperienceStack {
+  id String @id @default(uuid())
+
+  userId String
+  user   User?  @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  experienceJobId String
+  experienceJob   ExperienceJob? @relation(fields: [experienceJobId], references: [id], onDelete: Cascade)
+
+  techStackId String
+  techStack   TechStack? @relation(fields: [techStackId], references: [id], onDelete: Cascade)
+
+  @@index([experienceJobId])
+  @@index([techStackId])
+  @@index([userId])
+}
+
+model ProjectStack {
+  id String @id @default(uuid())
+
+  userId String
+  user   User?  @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  projectId String
+  project   Project? @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  techStackId String
+  techStack   TechStack? @relation(fields: [techStackId], references: [id], onDelete: Cascade)
+
+  @@index([projectId])
+  @@index([techStackId])
+  @@index([userId])
+}
+
+model TechStack {
+  id    String @id @default(uuid())
+  title String @unique
+
+  experienceStack ExperienceStack[]
+  projectStack    ProjectStack[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
