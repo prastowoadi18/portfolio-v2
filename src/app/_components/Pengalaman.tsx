@@ -43,7 +43,7 @@ const Pengalaman = async ({ userId, page = 2 }: PengalamanProps) => {
     },
   });
 
-  const [data, dataCount] = await Promise.all([
+  const [data, countData] = await Promise.all([
     experienceJob,
     experienceJobCount,
   ]);
@@ -71,7 +71,9 @@ const Pengalaman = async ({ userId, page = 2 }: PengalamanProps) => {
                 </p>
                 <p className="text-sm text-muted-foreground">
                   {format(new Date(e.startDate), "MMMM yyyy")} -{" "}
-                  {format(new Date(e.endDate), "MMMM yyyy")}
+                  {e.title === "PT Ismaya Group"
+                    ? "Present"
+                    : format(new Date(e.endDate), "MMMM yyyy")}
                 </p>
                 <Description
                   id={`pengalaman-desc-${e.title}`}
@@ -84,10 +86,13 @@ const Pengalaman = async ({ userId, page = 2 }: PengalamanProps) => {
           ))}
         </div>
 
-        {dataCount > 2 && (
+        {countData > 2 && (
           <Separator
-            length={dataCount}
-            searchParams={`experienceJob=${dataCount}`}
+            length={countData}
+            lengthNow={data.length}
+            searchParams={
+              data.length === countData ? "" : `experienceJob=${countData}`
+            }
           />
         )}
       </div>

@@ -87,7 +87,13 @@ const Project = async ({ userId, page = 2 }: ProjectProps) => {
           ))}
         </div>
         {countData > 2 && (
-          <Separator length={countData} searchParams={`project=${countData}`} />
+          <Separator
+            length={countData}
+            lengthNow={data.length}
+            searchParams={
+              data.length === countData ? "" : `project=${countData}`
+            }
+          />
         )}
       </div>
     </ContentWrapper>

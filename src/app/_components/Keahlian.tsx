@@ -7,7 +7,7 @@ interface KeahlianProps {
 }
 
 const Keahlian = async ({ userId, page = 5 }: KeahlianProps) => {
-  const data = prisma.techStack.findMany({
+  const keahlian = prisma.techStack.findMany({
     include: {
       experienceStack: {
         where: {
@@ -21,15 +21,15 @@ const Keahlian = async ({ userId, page = 5 }: KeahlianProps) => {
     take: page,
   });
 
-  const countData = prisma.techStack.count();
+  const keahlianCount = prisma.techStack.count();
 
-  const [keahlian, totalResults] = await Promise.all([data, countData]);
+  const [data, countData] = await Promise.all([keahlian, keahlianCount]);
 
   return (
     <ContentWrapper title="Keahlian">
       <div className="">
         <div className="mt-5 grid grid-cols-1 gap-5">
-          {keahlian.map((e) => (
+          {data.map((e) => (
             <div className="" key={e.title}>
               <h2 className="text-sm font-semibold">{e.title}</h2>
               <ul className="ml-5 mt-1 list-disc text-sm text-muted-foreground">
@@ -41,10 +41,11 @@ const Keahlian = async ({ userId, page = 5 }: KeahlianProps) => {
           ))}
         </div>
 
-        {totalResults > 6 && (
+        {countData > 6 && (
           <Separator
-            length={totalResults}
-            searchParams={`skill=${totalResults}`}
+            length={countData}
+            lengthNow={data.length}
+            searchParams={data.length === countData ? "" : `skill=${countData}`}
           />
         )}
       </div>

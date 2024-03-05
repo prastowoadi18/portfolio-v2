@@ -69,7 +69,10 @@ const Sertifikat = async ({ userId, page = 2 }: SertifikatProps) => {
         {countData > 2 && (
           <Separator
             length={countData}
-            searchParams={`certificate=${countData}`}
+            lengthNow={data.length}
+            searchParams={
+              data.length === countData ? "" : `certificate=${countData}`
+            }
           />
         )}
       </div>
